@@ -47,7 +47,7 @@ describe('Articles service object', function() {
   });
 
   context('Given \'shopping_list\' has data', () => {
-    //UPDATE, DELETE GO HERE
+    //UPDATE GO HERE
     beforeEach(() => {
       return db
         .into('shopping_list')
@@ -84,6 +84,25 @@ describe('Articles service object', function() {
         .then(allItems => {
           const expected = testItems.filter(item => item.id !== itemId); 
           expect(allItems).to.eql(expected);
+        });
+    });
+
+    it('updateItem() updates an item from the \'shopping_list\' table', () => {
+      const idOfItemToUpdate = 3;
+      const newItemData = {
+        name: 'new name',
+        date_added: new Date(),  
+        category: 'Main',
+        price: '99.99',
+        checked: true
+      };
+      return ShoppingListService.updateItem(db, idOfItemToUpdate, newItemData)
+        .then(() => ShoppingListService.getById(db, idOfItemToUpdate))
+        .then(item => {
+          expect(item).to.eql({
+            id: idOfItemToUpdate,
+            ...newItemData,
+          });
         });
     });
   });
