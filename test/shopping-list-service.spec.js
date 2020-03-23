@@ -47,7 +47,6 @@ describe('Articles service object', function() {
   });
 
   context('Given \'shopping_list\' has data', () => {
-    //UPDATE GO HERE
     beforeEach(() => {
       return db
         .into('shopping_list')
@@ -108,6 +107,32 @@ describe('Articles service object', function() {
   });
 
   context('Given \'shopping_list\' has no data', () => {
-    //CREATE GOES HERE
+    it('getAllItems() resolves an empty array', () => {
+      return ShoppingListService.getAllItems(db)
+        .then(actual => {
+          expect(actual).to.eql([]);
+        });
+    });
+
+    it('insertItem() inserts a new item and resolves the new item with an \'id\'', () => {
+      const newItem = {
+        name: 'Test new name name',
+        price: '5.05',
+        date_added: new Date('2020-01-01T00:00:00.000Z'),
+        checked: true,
+        category: 'Lunch',
+      };
+      return ShoppingListService.insertItem(db, newItem)
+        .then(actual => {
+          expect(actual).to.eql({
+            id: 1,
+            name: newItem.name,
+            price: newItem.price,
+            date_added: newItem.date_added,
+            checked: newItem.checked,
+            category: newItem.category,   
+          });
+        });
+    });
   });
 });
