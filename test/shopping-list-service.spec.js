@@ -47,7 +47,7 @@ describe('Articles service object', function() {
   });
 
   context('Given \'shopping_list\' has data', () => {
-    //READ, UPDATE, DELETE GO HERE
+    //UPDATE, DELETE GO HERE
     beforeEach(() => {
       return db
         .into('shopping_list')
@@ -59,6 +59,22 @@ describe('Articles service object', function() {
         .then(actual => {
           expect(actual).to.eql(testItems);
         });   
+    });
+
+    it('getById() resolves an item by id from \'shopping_list\' table', () => {
+      const thirdId = 3;
+      const thirdTestItem = testItems[thirdId -1];
+      return ShoppingListService.getById(db, thirdId)
+        .then(actual => {
+          expect(actual).to.eql({
+            id: thirdId,
+            name: thirdTestItem.name,
+            price: thirdTestItem.price,
+            date_added: thirdTestItem.date_added,
+            checked: thirdTestItem.checked,
+            category: thirdTestItem.category
+          });
+        });
     });
   });
 
